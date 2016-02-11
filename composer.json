@@ -1,0 +1,28 @@
+{
+  "name": "linearsoft/composer-svn-export",
+  "type": "composer-plugin",
+  "version": "dev-master",
+  "description": "A plugin that allows Composer to export SVN packages instead of checking them out",
+  "minimum-stability": "stable",
+  "license": "GPLv3",
+  "authors": [
+    {
+      "name": "Jason Abraham",
+      "email": "jason@linearsoft.com"
+    }
+  ],
+  "require": {
+    "composer-plugin-api": "^1.0"
+  },
+  "require-dev": {
+    "composer/composer": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "LinearSoft\\Composer\\SvnExport": "src/"
+    }
+  },
+  "extra": {
+    "class": "LinearSoft\\Composer\\SvnExport\\Plugin"
+  }
+}
