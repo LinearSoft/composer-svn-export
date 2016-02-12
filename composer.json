@@ -12,10 +12,16 @@
     }
   ],
   "require": {
+    "php": "^5.3.2 || ^7.0",
     "composer-plugin-api": "^1.0"
   },
   "require-dev": {
     "composer/composer": "dev-master"
+  },
+  "config": {
+    "platform": {
+      "php": "5.3.9"
+    }
   },
   "autoload": {
     "psr-4": {

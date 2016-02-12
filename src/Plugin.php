@@ -31,7 +31,44 @@ class Plugin implements PluginInterface
 
         //Extend RepositoryManager Classes
         $rm = $composer->getRepositoryManager();
-        $rm->setRepositoryClass('svn-export', 'Composer\Repository\VcsRepository');
+        $rm->setRepositoryClass('svn-export', 'LinearSoft\Composer\SvnExport\Repository\VcsRepository');
+        $rm->setRepositoryClass('svn-export-composer', 'LinearSoft\Composer\SvnExport\Repository\ComposerRepository');
+
+        //Load Extra Data
+        $extra = $composer->getPackage()->getExtra();
+        if (isset($extra['svn-export-repositories']) && is_array($extra['svn-export-repositories'])) {
+            foreach ($extra['svn-export-repositories'] as $index => $repoConfig) {
+                $this->validateRepositories($index, $repoConfig);
+                if($repoConfig['type'] === 'svn') $repoConfig['type'] = 'svn-export';
+                else $repoConfig['type'] = 'svn-export-composer';
+                $repo = $rm->createRepository($repoConfig['type'],$repoConfig);
+                $rm->addRepository($repo);
+            }
+        }
     }
+
+
+    /**
+     * @param int|string  $index
+     * @param mixed|array $repoConfig
+     *
+     * @throws \UnexpectedValueException
+     */
+    protected function validateRepositories($index, $repoConfig)
+    {
+        if (!is_array($repoConfig)) {
+            throw new \UnexpectedValueException('SvnExport Repository '.$index.' ('.json_encode($repoConfig).') should be an array, '.gettype($repoConfig).' given');
+        }
+        if (!isset($repoConfig['type'])) {
+            throw new \UnexpectedValueException('SvnExport Repository '.$index.' ('.json_encode($repoConfig).') must have a type defined');
+        }
+        if ($repoConfig['type'] !== 'svn' && $repoConfig['type'] !== 'composer') {
+            throw new \UnexpectedValueException('SvnExport Repository '.$index.' ('.json_encode($repoConfig).') must have a type of "svn" or "composer"');
+        }
+        if (!isset($repoConfig['url'])) {
+            throw new \UnexpectedValueException('SvnExport Repository '.$index.' ('.json_encode($repoConfig).') must have a url defined');
+        }
+    }
+
 
 }
