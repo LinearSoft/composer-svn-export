@@ -32,35 +32,30 @@ class Plugin implements PluginInterface
         $fs = new Filesystem($executor);
         $config = $composer->getConfig();
         $dm->setDownloader('svn-export', new Downloader($io, $config, $executor, $fs));
-        $this->trace('Added Downloader svn-export',true);
 
         //Extend RepositoryManager Classes
         $rm = $composer->getRepositoryManager();
         $rm->setRepositoryClass('svn-export', 'LinearSoft\Composer\SvnExport\Repository\VcsRepository');
         $rm->setRepositoryClass('svn-export-composer', 'LinearSoft\Composer\SvnExport\Repository\ComposerRepository');
-        $this->trace('Added Repository Classes svn-export & svn-export-composer');
 
         //Load Extra Data
         $extra = $composer->getPackage()->getExtra();
         if (isset($extra['svn-export-repositories']) && is_array($extra['svn-export-repositories'])) {
-            $this->trace('Parsing svn-export-repositories');
             foreach ($extra['svn-export-repositories'] as $index => $repoConfig) {
                 $this->validateRepositories($index, $repoConfig);
+
+                if(isset($repoConfig['name'])) $name = $repoConfig['name'];
+                else $name = is_int($index) ? preg_replace('{^https?://}i', '', $repoConfig['url']) : $index;
+
                 if($repoConfig['type'] === 'svn') $repoConfig['type'] = 'svn-export';
                 else $repoConfig['type'] = 'svn-export-composer';
+
                 $repo = $rm->createRepository($repoConfig['type'],$repoConfig);
                 $rm->addRepository($repo);
-                $this->trace("Added SvnExport Repo: {$repoConfig['url']}",true);
+                $this->io->write("Added SvnExport repo: $name");
             }
         }
     }
-
-    protected function trace($msg,$veryVerbose=true)
-    {
-        $verbosity = $veryVerbose ? IOInterface::VERY_VERBOSE : IOInterface::VERBOSE;
-        $this->io->write($msg,true,$verbosity);
-    }
-
 
     /**
      * @param int|string  $index

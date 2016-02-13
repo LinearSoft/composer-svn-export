@@ -86,7 +86,6 @@ class Downloader extends SvnDownloader
         if (!$this->filesystem->removeDirectory($path)) {
             throw new \RuntimeException('Could not completely delete '.$path.', aborting.');
         }
-        //Choo
         $this->doDownload($target,$path,$url);
     }
 

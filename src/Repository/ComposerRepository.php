@@ -12,27 +12,20 @@ use Composer\Repository\ComposerRepository as CrComposerRepository;
 
 class ComposerRepository extends CrComposerRepository
 {
-    public function findPackage($name, $constraint)
-    {
-        $name = str_replace('svn-export-','',$name);
-        return parent::findPackage($name, $constraint);
-    }
 
-    public function findPackages($name, $constraint = null)
+    protected function initialize()
     {
-        $name = str_replace('svn-export-','',$name);
-        return parent::findPackages($name, $constraint);
-    }
+        parent::initialize();
+        $repoData = $this->loadDataFromServer();
 
-    public function search($query, $mode = 0)
-    {
-        $query = str_replace('svn-export-','',$query);
-        return parent::search($query, $mode);
+        foreach ($repoData as $package) {
+            $this->addPackage($this->createPackage($package, 'Composer\Package\CompletePackage'));
+        }
     }
 
     protected function createPackage(array $data, $class)
     {
-        if(isset($data['source']['type'])) $data['source']['type'] = 'svn-export';
+        if(isset($data['source']['type']) && $data['source']['type'] === 'svn') $data['source']['type'] = 'svn-export';
         return parent::createPackage($data, $class);
     }
 }

@@ -23,32 +23,14 @@ class VcsRepository extends CrVcsRepository
         $drivers = $drivers ?: array(
             'svn-export'    => 'Composer\Repository\Vcs\SvnDriver',
         );
-
         parent::__construct($repoConfig, $io, $config, $dispatcher, $drivers);
     }
 
     protected function preProcess(VcsDriverInterface $driver, array $data, $identifier)
     {
-        if(isset($data['source']['type'])) $data['source']['type'] = 'svn-export';
-        return parent::preProcess($driver,$data,$identifier);
+        $data = parent::preProcess($driver,$data,$identifier);
+        if(isset($data['source']['type']) && $data['source']['type'] === 'svn') $data['source']['type'] = 'svn-export';
+        if(isset($data['dist']['type']) && $data['dist']['type'] === 'svn') $data['dist']['type'] = 'svn-export';
+        return $data;
     }
-
-    public function findPackage($name, $constraint)
-    {
-        $name = str_replace('svn-export-','',$name);
-        return parent::findPackage($name, $constraint);
-    }
-
-    public function findPackages($name, $constraint = null)
-    {
-        $name = str_replace('svn-export-','',$name);
-        return parent::findPackages($name, $constraint);
-    }
-
-    public function search($query, $mode = 0)
-    {
-        $query = str_replace('svn-export-','',$query);
-        return parent::search($query, $mode);
-    }
-
 }
