@@ -12,7 +12,6 @@ use Composer\Repository\ComposerRepository as CrComposerRepository;
 
 class ComposerRepository extends CrComposerRepository
 {
-
     protected function initialize()
     {
         parent::initialize();

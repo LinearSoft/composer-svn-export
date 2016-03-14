@@ -98,6 +98,6 @@ also add_ it as a standard repository or you will have problems.
 ### Bugs or features requests
 Found a problem or would like a feature submit it via [GitHub](https://github.com/LinearSoft/composer-svn-export/issues)
 ### License
-SvnExport is license under the GPLv3 License - ser the `LICENSE` file for details
+SvnExport is license under the GPLv3 License - see the `LICENSE` file for details
 ### Acknowledgements
 François Pluchino's [composer-asset-plugin](https://github.com/francoispluchino/composer-asset-plugin) design was used as a foundation for this plugin.
