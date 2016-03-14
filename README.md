@@ -48,9 +48,9 @@ from 'svn' to 'svn-export'.
 }
 ```
 ### 2. Add a SvnExport repository
-A repository of type 'svn' or 'composer' can be added as a SvnExport repository
-via the extras section. All packages of type 'svn' in the composer repository will automatically be
-converted to type 'svn-export'. **Note:** If you add a repository as and SvnExport repository _do NOT
+A repository of type 'svn' or 'composer' can be used as a SvnExport repository
+via the extras section. Note: All packages of type 'svn' in a composer repository will automatically be
+converted to type 'svn-export'. **Warning:** If you add a repository as a SvnExport repository _do NOT
 also add_ it as a standard repository or you will have problems.
 ##### composer.json
 ```json
