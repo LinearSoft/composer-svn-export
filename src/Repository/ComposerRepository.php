@@ -23,7 +23,7 @@ class ComposerRepository extends CrComposerRepository
         }
     }
 
-    protected function createPackage(array $data, $class)
+    protected function createPackage(array $data, $class = 'Composer\Package\CompletePackage')
     {
         if(isset($data['source']['type']) && $data['source']['type'] === 'svn') $data['source']['type'] = 'svn-export';
         return parent::createPackage($data, $class);
